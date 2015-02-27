@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <configure
+        xmlns="http://namespaces.zope.org/zope"
+        xmlns:browser="http://namespaces.zope.org/browser"
+        xmlns:zcml="http://namespaces.zope.org/zcml">
+        <configure zcml:condition="installed Products.Zuul">
+
+            <include package="Products.ZenUtils.extdirect.zope" file="meta.zcml"/>
+
+
+            <!-- ZenPack Info -->
+
+            <browser:directRouter
+                name="zenJavaTomcat_router"
+                for="*"
+                class="ZenPacks.community.zenJavaTomcat.routers.zenJavaTomcatRouter"
+                namespace="Zenoss.remote"
+                permission="zenoss.View"
+            />
+    
+            <adapter
+                name="zenJavaTomcatAdapter"
+                provides="ZenPacks.community.zenJavaTomcat.interfaces.IzenJavaTomcatFacade"
+                for="*"
+                factory="ZenPacks.community.zenJavaTomcat.facades.zenJavaTomcatFacade"
+            />
+                
+            <browser:resourceDirectory
+                    name="zenJavaTomcat"
+                    directory="resources"
+            />
+
+            <!-- Component Info -->
+            <adapter factory="ZenPacks.community.zenJavaTomcat.info.TomcatGlobalRequestProcessorInfo"
+                for="ZenPacks.community.zenJavaTomcat.TomcatGlobalRequestProcessor.TomcatGlobalRequestProcessor"
+                provides="ZenPacks.community.zenJavaTomcat.interfaces.ITomcatGlobalRequestProcessorInfo"
+            />
+    
+            <browser:viewlet
+                name="js-TomcatGlobalRequestProcessor"
+                paths="/++resource++zenJavaTomcat/tomcatglobalrequestprocessor.js"
+                weight="10"
+                manager="Products.ZenUI3.browser.interfaces.IJavaScriptSrcManager"
+                class="Products.ZenUI3.browser.javascript.JavaScriptSrcBundleViewlet"
+                permission="zope2.Public"
+            />
+
+            <utility provides="zope.schema.interfaces.IVocabularyFactory"
+                component=".info.TomcatGlobalRequestProcessorgetEventClassesVocabulary"
+                name="TomcatGlobalRequestProcessorgetEventClasses"
+            />
+
+            <!-- Component Info -->
+            <adapter factory="ZenPacks.community.zenJavaTomcat.info.TomcatThreadPoolInfo"
+                for="ZenPacks.community.zenJavaTomcat.TomcatThreadPool.TomcatThreadPool"
+                provides="ZenPacks.community.zenJavaTomcat.interfaces.ITomcatThreadPoolInfo"
+            />
+    
+            <browser:viewlet
+                name="js-TomcatThreadPool"
+                paths="/++resource++zenJavaTomcat/tomcatthreadpool.js"
+                weight="10"
+                manager="Products.ZenUI3.browser.interfaces.IJavaScriptSrcManager"
+                class="Products.ZenUI3.browser.javascript.JavaScriptSrcBundleViewlet"
+                permission="zope2.Public"
+            />
+
+            <utility provides="zope.schema.interfaces.IVocabularyFactory"
+                component=".info.TomcatThreadPoolgetEventClassesVocabulary"
+                name="TomcatThreadPoolgetEventClasses"
+            />
+
+            <!-- Component Info -->
+            <adapter factory="ZenPacks.community.zenJavaTomcat.info.TomcatCacheInfo"
+                for="ZenPacks.community.zenJavaTomcat.TomcatCache.TomcatCache"
+                provides="ZenPacks.community.zenJavaTomcat.interfaces.ITomcatCacheInfo"
+            />
+    
+            <browser:viewlet
+                name="js-TomcatCache"
+                paths="/++resource++zenJavaTomcat/tomcatcache.js"
+                weight="10"
+                manager="Products.ZenUI3.browser.interfaces.IJavaScriptSrcManager"
+                class="Products.ZenUI3.browser.javascript.JavaScriptSrcBundleViewlet"
+                permission="zope2.Public"
+            />
+
+            <utility provides="zope.schema.interfaces.IVocabularyFactory"
+                component=".info.TomcatCachegetEventClassesVocabulary"
+                name="TomcatCachegetEventClasses"
+            />
+
+        </configure>
+    </configure>
+
