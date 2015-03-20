@@ -1,6 +1,15 @@
-
 from ZenPacks.community.zenJavaApp.lib.CommonMBeanMap import *
 from ZenPacks.community.zenJavaTomcat.Definition import *
+
+
+__doc__ = """TomcatAppCacheMap
+
+TomcatAppCacheMap detects Tomcat App Caches on a per-JVM basis.
+
+This version adds a relation to associated ipservice and javaapp components.
+
+"""
+
 
 class TomcatAppCacheMap(CommonMBeanMap):
     """Map JMX Client output table to model."""
@@ -12,19 +21,8 @@ class TomcatAppCacheMap(CommonMBeanMap):
     
     searchMBean = 'Catalina:type=Cache,host=*,path=*'
     
-    def process(self, device, results, log):
-        log.info("The plugin %s returned %s results." % (self.name(), len(results)))
-        self.scan =  None
-        rm = self.relMap()
-        for result in results:
-            result.pop('path')
-            enabled = result['enabled']
-            result.pop('enabled')
-            om = self.objectMap(result)
-            om.setJavaapp = ''
-            om.setIpservice = ''
-            om.monitor = enabled 
-            rm.append(om)
-            log.debug(om)
-        return rm
+    def postprocess(self, result, om, log):
+        '''optional method before appending to relmap'''
+        delattr(om,'path')
+        return om
 
